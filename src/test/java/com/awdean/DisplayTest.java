@@ -15,13 +15,13 @@ import javax.swing.JTextArea;
 
 import org.junit.Test;
 
-public class GUITest {
+public class DisplayTest {
 
 	@Test
 	public void testGUI() {
-		GUI gui = new GUI();
+		Display gui = new Display();
 		assertNotNull(gui.getFrame());
-		assertEquals(gui.getFrame().getTitle(), GUI.TITLE);
+		assertEquals(gui.getFrame().getTitle(), Display.TITLE);
 		assertNotNull(gui.getTextArea());
 	}
 	
@@ -29,7 +29,7 @@ public class GUITest {
 	public void testGUIJFrame() {
 		String title = "TEST";
 		JFrame frame = new JFrame(title);
-		GUI gui = new GUI(frame);
+		Display gui = new Display(frame);
 		assertSame(gui.getFrame(), frame);
 		assertEquals(gui.getFrame().getTitle(), title);
 		assertNotNull(gui.getTextArea());
@@ -38,9 +38,9 @@ public class GUITest {
 	@Test
 	public void testGUIJTextArea() {
 		JTextArea textArea = new JTextArea();
-		GUI gui = new GUI(textArea);
+		Display gui = new Display(textArea);
 		assertNotNull(gui.getFrame());
-		assertEquals(gui.getFrame().getTitle(), GUI.TITLE);
+		assertEquals(gui.getFrame().getTitle(), Display.TITLE);
 		assertSame(gui.getTextArea(), textArea);
 	}
 
@@ -49,7 +49,7 @@ public class GUITest {
 		String title = "TEST";
 		JFrame frame = new JFrame(title);
 		JTextArea textArea = new JTextArea();
-		GUI gui = new GUI(frame, textArea);
+		Display gui = new Display(frame, textArea);
 		assertSame(gui.getFrame(), frame);
 		assertEquals(gui.getFrame().getTitle(), title);
 		assertSame(gui.getTextArea(), textArea);
@@ -57,23 +57,23 @@ public class GUITest {
 	
 	@Test
 	public void testGetInstance() {
-		assertNotNull(GUI.getInstance());
-		assertSame(GUI.getInstance(), GUI.getInstance());
+		assertNotNull(Display.getInstance());
+		assertSame(Display.getInstance(), Display.getInstance());
 	}
 
 	@Test
 	public void testGetFrame() {
-		assertSame(GUI.getInstance().getFrame(), GUI.getInstance().getFrame());
+		assertSame(Display.getInstance().getFrame(), Display.getInstance().getFrame());
 	}
 
 	@Test
 	public void testGetTextArea() {
-		assertSame(GUI.getInstance().getTextArea(), GUI.getInstance().getTextArea());
+		assertSame(Display.getInstance().getTextArea(), Display.getInstance().getTextArea());
 	}
 
 	@Test
 	public void testInitFrame() {
-		GUI gui = new GUI();
+		Display gui = new Display();
 		gui.initFrame();
 		assertEquals(gui.getFrame().getDefaultCloseOperation(), JFrame.EXIT_ON_CLOSE);
 		assertNotNull(gui.getFrame().getLayout());
@@ -82,7 +82,7 @@ public class GUITest {
 
 	@Test
 	public void testInitTextArea() {
-		GUI gui = new GUI();
+		Display gui = new Display();
 		gui.initFrame();
 		assertNull(gui.getTextArea().getParent());
 		gui.initTextArea();
@@ -93,7 +93,7 @@ public class GUITest {
 	@Test
 	public void testUpdateText() {
 		String text = "TEST";
-		GUI gui = new GUI();
+		Display gui = new Display();
 		assertEquals(gui.getTextArea().getText(), "");
 		gui.updateText(text);
 		assertEquals(gui.getTextArea().getText(), text);

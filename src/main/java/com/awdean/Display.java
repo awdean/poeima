@@ -1,33 +1,34 @@
 package com.awdean;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
-public class GUI {
+public class Display {
 
 	public static final String TITLE = "poeima";
 
-	private static final GUI instance = new GUI();
+	private static final Display INSTANCE = new Display();
 	
-	public static GUI getInstance() {
-		return instance;
+	public static Display getInstance() {
+		return INSTANCE;
 	}
 	
-	public GUI() {
+	public Display() {
 		this(new JFrame(TITLE), new JTextArea());
 	}
 	
-	public GUI(JFrame frame) {
+	public Display(JFrame frame) {
 		this(frame, new JTextArea());
 	}
 	
-	public GUI(JTextArea textArea) {
+	public Display(JTextArea textArea) {
 		this(new JFrame(TITLE), textArea);
 	}
 	
-	public GUI(JFrame frame, JTextArea textArea) {
+	public Display(JFrame frame, JTextArea textArea) {
 		this._frame = frame;
 		this._textArea = textArea;
 	}
@@ -50,6 +51,7 @@ public class GUI {
 	}
 	
 	public void initFrame() {
+		getFrame().setMinimumSize(new Dimension(233, 377));
 		getFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	getFrame().setLayout(new BorderLayout());
 	}
@@ -66,8 +68,11 @@ public class GUI {
 	}
 	
 	public void updateText(String text) {
-		getTextArea().setText(text);
-		getFrame().pack();
+		synchronized (this) {
+			getTextArea().setText(text);
+			getFrame().pack();
+			getFrame().toFront();
+		}
 	}
 	
 }

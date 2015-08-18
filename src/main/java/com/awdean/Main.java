@@ -1,13 +1,14 @@
 package com.awdean;
 
 
+
 /**
  * Hello world!
  * 
  */
 public class Main {
 	public static void main(String[] args) {
-		GUI gui = GUI.getInstance();
+		Display gui = Display.getInstance();
 		gui.init();
 
 		gui.updateText("Hello World!\nAnd the same to you!");
