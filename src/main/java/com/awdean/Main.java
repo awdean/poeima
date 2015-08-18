@@ -20,6 +20,8 @@ public class Main {
 		}
 
 		gui.updateText("I've altered your text.\nPray I do not alter it further.");
+		
+		ClipMon.getInstance().start();
 	}
 
 }
