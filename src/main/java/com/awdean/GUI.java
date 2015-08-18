@@ -55,6 +55,7 @@ public class GUI {
 	}
 	
 	public void initTextArea() {
+		getTextArea().setEditable(false);
 		getFrame().add(getTextArea(), BorderLayout.CENTER);
 		getFrame().pack();
 	}

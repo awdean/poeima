@@ -2,6 +2,7 @@ package com.awdean;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
@@ -85,6 +86,7 @@ public class GUITest {
 		gui.initFrame();
 		assertNull(gui.getTextArea().getParent());
 		gui.initTextArea();
+		assertFalse(gui.getTextArea().isEditable());
 		assertNotNull(gui.getTextArea().getParent());
 	}
 
