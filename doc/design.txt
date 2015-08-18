@@ -1,0 +1,13 @@
+At a high level, the basic structure of this utility is fairly simple:
+
+  (1) Monitor the system clipboard for copied plain text.
+  (2) Attempt to parse that text as Path of Exile (PoE) item copy data.
+  (3) Extract the item's properties from the parsed item copy data text.
+  (4) Identify which modifier classes could resolve to those properties.
+  (5) Use constraint logic programming to identify combinations of specific
+      modifiers that cover the entire set of item property values.
+  (6) Make one (or all) of those combinations visible to the user.
+
+The expected bulk of work lies in parsing over various formats of text,
+mapping properties to hundreds of different modifiers, and mapping correctly
+between several external and internal data types.
