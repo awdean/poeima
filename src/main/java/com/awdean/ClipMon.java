@@ -87,9 +87,6 @@ public class ClipMon extends Thread {
         }
         
         Transferable data = getClipboard().getContents(null);
-        if (null == data) {
-            return false;
-        }
         
         try {
             String contents = (String) data.getTransferData(DataFlavor.stringFlavor);

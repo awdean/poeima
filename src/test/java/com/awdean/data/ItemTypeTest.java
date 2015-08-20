@@ -1,5 +1,6 @@
 package com.awdean.data;
 
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.iterableWithSize;
 import static org.junit.Assert.assertThat;
@@ -20,6 +21,14 @@ public class ItemTypeTest {
                                          .map((ItemType itemType) -> itemType.toString())
                                          .collect(Collectors.toSet());
         assertThat(descriptions, iterableWithSize(values.size()));
+    }
+    
+    @Test
+    public void testParseItemTypeNull() {
+        assertThat(ItemType.parseItemType(null), is(nullValue()));
+        
+        String rejected = "The quick brown fox jumped over the lazy dog.";
+        assertThat(ItemType.parseItemType(rejected), is(nullValue()));
     }
     
     @Test

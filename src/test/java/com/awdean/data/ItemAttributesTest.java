@@ -1,5 +1,6 @@
 package com.awdean.data;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -33,6 +34,31 @@ public class ItemAttributesTest {
     }
 
     @Test
+    public void testEquals() {
+        assertThat(DEFAULT, is(DEFAULT));
+        assertThat(DEFAULT, is(not(equalTo(null)))); // need equalTo for null value
+        assertThat(DEFAULT, is(not(COMBINED)));
+        
+        assertThat(COMBINED, is(COMBINED));
+        assertThat(COMBINED, is(not(equalTo(null)))); // need equalTo for null value
+        assertThat(COMBINED, is(not(DEFAULT)));
+    }
+    
+    @Test
+    public void testToString() {
+        assertThat(DEFAULT.toString(), is(notNullValue()));
+        assertThat(DEFAULT.toString(), is(not(COMBINED.toString())));
+        
+        assertThat(COMBINED.toString(), is(notNullValue()));
+        assertThat(COMBINED.toString(), is(not(DEFAULT.toString())));
+    }
+    
+    @Test
+    public void testHashCode() {
+        assertThat(DEFAULT.hashCode(), is(not(COMBINED.hashCode())));
+    }
+    
+    @Test
     public void testExclusive() {
         try {
             ItemAttributes.exclusive(null);
@@ -50,6 +76,12 @@ public class ItemAttributesTest {
     public void testJoin() throws AlreadyBoundException {
         ItemAttributes combined = ItemAttributes.join(lhs, rhs);
         assertThat(combined, is(COMBINED));
+        
+        combined = ItemAttributes.join(combined, null);
+        assertThat(combined, is(COMBINED));
+        
+        combined = ItemAttributes.join(null, combined);
+        assertThat(combined, is(COMBINED));
     }
 
     @Test(expected = AlreadyBoundException.class)
@@ -60,37 +92,143 @@ public class ItemAttributesTest {
 
     @Test
     public void testJoinCoreInPlace() {
-        assertJoinInPlaceInvariants(lhs, rhs, ItemAttributes::joinCoreInPlace);
+        BiFunction<ItemAttributes, ItemAttributes, String> testFunction = ItemAttributes::joinCoreInPlace;
+        
+        assertJoinInPlaceInvariants(lhs, rhs, testFunction);
+        
+        ItemAttributes target = new ItemAttributes();
+        assertThat(testFunction.apply(target, COMBINED), is(nullValue()));
+        
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.rarity = null;
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.name = null;
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.base = null;
+        
+        assertThat(testFunction.apply(target, target), is(nullValue()));
     }
 
     @Test
     public void testJoinInherentInPlace() {
-        assertJoinInPlaceInvariants(lhs, rhs, ItemAttributes::joinInherentsInPlace);
+        BiFunction<ItemAttributes, ItemAttributes, String> testFunction = ItemAttributes::joinInherentsInPlace;
+        
+        assertJoinInPlaceInvariants(lhs, rhs, testFunction);
+        
+        ItemAttributes target = new ItemAttributes();
+        assertThat(testFunction.apply(target, COMBINED), is(nullValue()));
+        
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.type = null;
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.quality = 0;
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.armour = 0;
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.evasionRating = 0;
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.energyShield = 0;
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.block = 0;
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.physical = null;
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.elemental = null;
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.chaos = null;
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.critical = null;
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.attacks = null;
+        
+        assertThat(testFunction.apply(target, target), is(nullValue()));
     }
 
     @Test
     public void testJoinRequirementsInPlace() {
-        assertJoinInPlaceInvariants(lhs, rhs, ItemAttributes::joinRequirementsInPlace);
+        BiFunction<ItemAttributes, ItemAttributes, String> testFunction = ItemAttributes::joinRequirementsInPlace;
+        
+        assertJoinInPlaceInvariants(lhs, rhs, testFunction);
+        
+        ItemAttributes target = new ItemAttributes();
+        assertThat(testFunction.apply(target, COMBINED), is(nullValue()));
+        
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.levelRequired = 0;
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.strengthRequired = 0;
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.dexterityRequired = 0;
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.intelligenceRequired = 0;
+        
+        assertThat(testFunction.apply(target, target), is(nullValue()));
     }
 
     @Test
     public void testJoinSocketsInPlace() {
-        assertJoinInPlaceInvariants(lhs, rhs, ItemAttributes::joinSocketsInPlace);
+        BiFunction<ItemAttributes, ItemAttributes, String> testFunction = ItemAttributes::joinSocketsInPlace;
+        
+        assertJoinInPlaceInvariants(lhs, rhs, testFunction);
+        
+        ItemAttributes target = new ItemAttributes();
+        assertThat(testFunction.apply(target, COMBINED), is(nullValue()));
+        
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.sockets = null;
+        
+        assertThat(testFunction.apply(target, target), is(nullValue()));
     }
 
     @Test
     public void testJoinLevelInPlace() {
-        assertJoinInPlaceInvariants(lhs, rhs, ItemAttributes::joinLevelInPlace);
+        BiFunction<ItemAttributes, ItemAttributes, String> testFunction = ItemAttributes::joinLevelInPlace;
+        
+        assertJoinInPlaceInvariants(lhs, rhs, testFunction);
+        
+        ItemAttributes target = new ItemAttributes();
+        assertThat(testFunction.apply(target, COMBINED), is(nullValue()));
+        
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.level = 0;
+        
+        assertThat(testFunction.apply(target, target), is(nullValue()));
     }
 
     @Test
     public void testJoinPropertiesInPlace() {
-        assertJoinInPlaceInvariants(lhs, rhs, ItemAttributes::joinPropertiesInPlace);
+        BiFunction<ItemAttributes, ItemAttributes, String> testFunction = ItemAttributes::joinPropertiesInPlace;
+        
+        assertJoinInPlaceInvariants(lhs, rhs, testFunction);
+        
+        ItemAttributes target = new ItemAttributes();
+        assertThat(testFunction.apply(target, COMBINED), is(nullValue()));
+        
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.implicit = null;
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.explicits = null;
+        
+        assertThat(testFunction.apply(target, target), is(nullValue()));
     }
 
     @Test
     public void testJoinTagsInplace() {
-        assertJoinInPlaceInvariants(lhs, rhs, ItemAttributes::joinTagsInPlace);
+        BiFunction<ItemAttributes, ItemAttributes, String> testFunction = ItemAttributes::joinTagsInPlace;
+        
+        assertJoinInPlaceInvariants(lhs, rhs, testFunction);
+        
+        ItemAttributes target = new ItemAttributes();
+        assertThat(testFunction.apply(target, COMBINED), is(nullValue()));
+        
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.corrupted = false;
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.mirrored = false;
+        assertThat(testFunction.apply(target, target), is(notNullValue()));
+        target.unidentified = false;
+        
+        assertThat(testFunction.apply(target, target), is(nullValue()));
     }
 
     private void assertJoinInPlaceInvariants(ItemAttributes lhs, ItemAttributes rhs,
@@ -102,10 +240,11 @@ public class ItemAttributesTest {
         ItemAttributes target = new ItemAttributes();
         assertThat(joiner.apply(target, COMBINED), is(nullValue()));
 
-        assertThat(combined, is(target));
         assertThat(combined, is(not(DEFAULT)));
-        
-        assertThat(joiner.apply(combined, combined), is(notNullValue()));
+        assertThat(combined, is(target));
+
+        assertThat(joiner.apply(combined, null), is(nullValue()));
+        assertThat(combined, is(target));
     }
 
     static {
