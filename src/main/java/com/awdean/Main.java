@@ -7,21 +7,21 @@ package com.awdean;
  * 
  */
 public class Main {
-	public static void main(String[] args) {
-		Display gui = Display.getInstance();
-		gui.init();
+    public static void main(String[] args) {
+        Display gui = Display.getInstance();
+        gui.init();
 
-		gui.updateText("Hello World!\nAnd the same to you!");
+        gui.updateText("Hello World!\nAnd the same to you!");
 
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException ex) {
-			// do nothing
-		}
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            // do nothing
+        }
 
-		gui.updateText("I've altered your text.\nPray I do not alter it further.");
-		
-		ClipMon.getInstance().start();
-	}
+        gui.updateText("I've altered your text.\nPray I do not alter it further.");
+        
+        ClipMon.getInstance().start();
+    }
 
 }
