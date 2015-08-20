@@ -7,6 +7,7 @@ import org.junit.runners.Suite.SuiteClasses;
 import com.awdean.data.ItemAttributesTest;
 import com.awdean.data.ItemRarityTest;
 import com.awdean.data.ItemTypeTest;
+import com.awdean.grammar.clipboard.element.CommonGrammarTest;
 import com.awdean.grammar.common.TerminalsGrammarTest;
 
 @RunWith(Suite.class)
@@ -20,7 +21,8 @@ import com.awdean.grammar.common.TerminalsGrammarTest;
     ItemRarityTest.class,
     ItemTypeTest.class,
     // Parser tests
-    TerminalsGrammarTest.class 
+    TerminalsGrammarTest.class,
+    CommonGrammarTest.class
 })
 public class AllTests {
 
