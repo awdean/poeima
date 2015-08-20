@@ -16,4 +16,16 @@ public enum ItemRarity {
         return _description;
     }
     
+    public static ItemRarity parseItemRarity(String string) {
+        if (null == string) {
+            return null;
+        }
+        for (ItemRarity itemRarity : ItemRarity.values()) {
+            if (string.equals(itemRarity.toString())) {
+                return itemRarity;
+            }
+        }
+        return null;
+    }
+
 }

@@ -34,4 +34,18 @@ public enum ItemType {
     public String toString() {
         return _description;
     }
+
+    public static ItemType parseItemType(String string) {
+        if (null == string) {
+            return null;
+        }
+        for (ItemType itemType : ItemType.values()) {
+            if (string.equals(itemType.toString())) {
+                return itemType;
+            }
+        }
+        return null;
+    }
+
+
 }
