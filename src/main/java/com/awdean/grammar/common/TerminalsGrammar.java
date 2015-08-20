@@ -17,8 +17,9 @@ import com.google.common.collect.Range;
 
 public class TerminalsGrammar {
 
-    private TerminalsGrammar() {};
-    
+    private TerminalsGrammar() {
+    };
+
     public static Parser tFloat() {
         // tFloat = /\d+(\.\d+)?/ ;
         Parser parser = digit().plus(); // /\d+/

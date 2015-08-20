@@ -5,7 +5,6 @@ import static com.awdean.grammar.common.TerminalsGrammar.tNumber;
 import static org.petitparser.parser.primitive.StringParser.of;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
@@ -15,6 +14,9 @@ import org.petitparser.utils.Functions;
 import com.awdean.data.ItemAttributes;
 
 public class CommonGrammar {
+
+    private CommonGrammar() {
+    };
 
     public static final String AUGMENTED = "(augmented)";
     public static final String CORRUPTED = "Corrupted";
@@ -142,7 +144,7 @@ public class CommonGrammar {
     public static Parser itemRequirements() {
         Parser parser = tSectionBreak().seq(of("Requirements:").trim());
         parser = parser.seq(levelRequirement().or(strRequirement(), dexRequirement(), intRequirement()).plus());
-        parser = parser.map(FLATTEN_AND_JOIN);
+        parser = parser.map(CommonGrammar::flattenAndJoin);
         return parser;
     }
 
@@ -209,33 +211,27 @@ public class CommonGrammar {
         });
     }
 
-    public static final Function<Object, Object> FLATTEN_AND_JOIN = new Function<Object, Object>() {
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public Object apply(Object t) {
-            if (null == t) {
-                return null;
-            }
-
-            if (t instanceof List) {
-                return flatten((List<Object>) t).stream().reduce(null, (a, b) -> ItemAttributes.join(a, b));
-            } else if (t.getClass().isArray()) {
-                return flatten(Arrays.asList(t)).stream().reduce(null, (a, b) -> ItemAttributes.join(a, b));
-            } else {
-                return t;
-            }
+    @SuppressWarnings("unchecked")
+    public static Object flattenAndJoin(Object object) {
+        if (null == object) {
+            return null;
         }
-    };
+
+        if (object instanceof List) {
+            return flatten((List<Object>) object).stream().reduce(null, (a, b) -> ItemAttributes.join(a, b));
+        } else {
+            return object;
+        }
+    }
 
     @SuppressWarnings("unchecked")
     public static List<Object> flatten(List<Object> list) {
         List<Object> accum = new ArrayList<>();
         for (Object item : list) {
-            if (item instanceof List) {
+            if (null == item) {
+                accum.add(item);
+            } else if (item instanceof List) {
                 accum.addAll(flatten((List<Object>) item));
-            } else if (item.getClass().isArray()) {
-                accum.addAll(flatten(Arrays.asList(item)));
             } else {
                 accum.add(item);
             }
