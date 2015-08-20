@@ -1,8 +1,10 @@
+language: java
+jdk:
+  - oraclejdk8
 before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
-jdk:
-  - oraclejdk8
-language: java
+after_success:
+  - mvn clean test coveralls:report
 notifications:
     email: false
