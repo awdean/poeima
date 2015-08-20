@@ -1,8 +1,9 @@
 package com.awdean.data;
 
 import java.math.BigDecimal;
-import java.rmi.AlreadyBoundException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.common.collect.Range;
 
@@ -49,253 +50,260 @@ public class ItemAttributes {
     public boolean mirrored = false;
     public boolean unidentified = false;
 
-    public static ItemAttributes join(ItemAttributes lhs, ItemAttributes rhs) throws AlreadyBoundException {
-        if (null == lhs) {
+    // All member variable names which have been (incorrectly) set multiple
+    // times.
+    public Set<String> dirty = null;
+
+    public static Object join(Object lhs, Object rhs) {
+        if (!(lhs instanceof ItemAttributes)) {
             return rhs;
         }
-        if (null == rhs) {
+        ItemAttributes ialhs = (ItemAttributes) lhs;
+        if (!(rhs instanceof ItemAttributes)) {
             return lhs;
         }
+        ItemAttributes iarhs = (ItemAttributes) rhs;
+
         ItemAttributes combined = new ItemAttributes();
         // join the lhs
-        exclusive(joinCoreInPlace(combined, lhs));
-        exclusive(joinInherentsInPlace(combined, lhs));
-        exclusive(joinRequirementsInPlace(combined, lhs));
-        exclusive(joinSocketsInPlace(combined, lhs));
-        exclusive(joinLevelInPlace(combined, lhs));
-        exclusive(joinPropertiesInPlace(combined, lhs));
-        exclusive(joinTagsInPlace(combined, lhs));
+        combined.joinCore(ialhs);
+        combined.joinInherents(ialhs);
+        combined.joinRequirements(ialhs);
+        combined.joinSockets(ialhs);
+        combined.joinLevel(ialhs);
+        combined.joinProperties(ialhs);
+        combined.joinTags(ialhs);
         // join the rhs
-        exclusive(joinCoreInPlace(combined, rhs));
-        exclusive(joinInherentsInPlace(combined, rhs));
-        exclusive(joinRequirementsInPlace(combined, rhs));
-        exclusive(joinSocketsInPlace(combined, rhs));
-        exclusive(joinLevelInPlace(combined, rhs));
-        exclusive(joinPropertiesInPlace(combined, rhs));
-        exclusive(joinTagsInPlace(combined, rhs));
+        combined.joinCore(iarhs);
+        combined.joinInherents(iarhs);
+        combined.joinRequirements(iarhs);
+        combined.joinSockets(iarhs);
+        combined.joinLevel(iarhs);
+        combined.joinProperties(iarhs);
+        combined.joinTags(iarhs);
 
         return combined;
     }
 
-    public static void exclusive(String collision) throws AlreadyBoundException {
-        if (null != collision) {
-            throw new AlreadyBoundException(collision);
-        }
-    }
-
-    public static String joinCoreInPlace(ItemAttributes accum, ItemAttributes delta) {
+    public void joinCore(ItemAttributes delta) {
         // Special case: Do nothing when given a null delta.
         if (null == delta) {
-            return null;
+            return;
         }
         // Join all core attributes.
         if (null != delta.rarity) {
-            if (null != accum.rarity) {
-                return "rarity";
+            if (null != rarity) {
+                markDirty("rarity");
             }
-            accum.rarity = delta.rarity;
+            rarity = delta.rarity;
         }
         if (null != delta.name) {
-            if (null != accum.name) {
-                return "name";
+            if (null != name) {
+                markDirty("name");
             }
-            accum.name = delta.name;
+            name = delta.name;
         }
         if (null != delta.base) {
-            if (null != accum.base) {
-                return "base";
+            if (null != base) {
+                markDirty("base");
             }
-            accum.base = delta.base;
+            base = delta.base;
         }
-        return null;
     }
 
-    public static String joinInherentsInPlace(ItemAttributes accum, ItemAttributes delta) {
+    public void joinInherents(ItemAttributes delta) {
         // Special case: Do nothing when given a null delta.
         if (null == delta) {
-            return null;
+            return;
         }
         // Join all common inherent properties.
         if (null != delta.type) {
-            if (null != accum.type) {
-                return "type";
+            if (null != type) {
+                markDirty("type");
             }
-            accum.type = delta.type;
+            type = delta.type;
         }
         if (0 != delta.quality) {
-            if (0 != accum.quality) {
-                return "quality";
+            if (0 != quality) {
+                markDirty("quality");
             }
-            accum.quality = delta.quality;
+            quality = delta.quality;
         }
         // Join all armour inherent properties.
         if (0 != delta.armour) {
-            if (0 != accum.armour) {
-                return "armour";
+            if (0 != armour) {
+                markDirty("armour");
             }
-            accum.armour = delta.armour;
+            armour = delta.armour;
         }
         if (0 != delta.evasionRating) {
-            if (0 != accum.evasionRating) {
-                return "evasionRating";
+            if (0 != evasionRating) {
+                markDirty("evasionRating");
             }
-            accum.evasionRating = delta.evasionRating;
+            evasionRating = delta.evasionRating;
         }
         if (0 != delta.energyShield) {
-            if (0 != accum.energyShield) {
-                return "energyShield";
+            if (0 != energyShield) {
+                markDirty("energyShield");
             }
-            accum.energyShield = delta.energyShield;
+            energyShield = delta.energyShield;
         }
         if (0 != delta.block) {
-            if (0 != accum.block) {
-                return "block";
+            if (0 != block) {
+                markDirty("block");
             }
-            accum.block = delta.block;
+            block = delta.block;
         }
         // Join all weapon inherent properties.
         if (null != delta.physical) {
-            if (null != accum.physical) {
-                return "physical";
+            if (null != physical) {
+                markDirty("physical");
             }
-            accum.physical = delta.physical;
+            physical = delta.physical;
         }
         if (null != delta.elemental) {
-            if (null != accum.elemental) {
-                return "elemental";
+            if (null != elemental) {
+                markDirty("elemental");
             }
-            accum.elemental = delta.elemental;
+            elemental = delta.elemental;
         }
         if (null != delta.chaos) {
-            if (null != accum.chaos) {
-                return "chaos";
+            if (null != chaos) {
+                markDirty("chaos");
             }
-            accum.chaos = delta.chaos;
+            chaos = delta.chaos;
         }
         if (null != delta.critical) {
-            if (null != accum.critical) {
-                return "critical";
+            if (null != critical) {
+                markDirty("critical");
             }
-            accum.critical = delta.critical;
+            critical = delta.critical;
         }
         if (null != delta.attacks) {
-            if (null != accum.attacks) {
-                return "attacks";
+            if (null != attacks) {
+                markDirty("attacks");
             }
-            accum.attacks = delta.attacks;
+            attacks = delta.attacks;
         }
-        return null;
     }
 
-    public static String joinRequirementsInPlace(ItemAttributes accum, ItemAttributes delta) {
+    public void joinRequirements(ItemAttributes delta) {
         // Special case: Do nothing when given a null delta.
         if (null == delta) {
-            return null;
+            return;
         }
         // Join all item requirements.
         if (0 != delta.levelRequired) {
-            if (0 != accum.levelRequired) {
-                return "levelRequired";
+            if (0 != levelRequired) {
+                markDirty("levelRequired");
             }
-            accum.levelRequired = delta.levelRequired;
+            levelRequired = delta.levelRequired;
         }
         if (0 != delta.strengthRequired) {
-            if (0 != accum.strengthRequired) {
-                return "strengthRequired";
+            if (0 != strengthRequired) {
+                markDirty("strengthRequired");
             }
-            accum.strengthRequired = delta.strengthRequired;
+            strengthRequired = delta.strengthRequired;
         }
         if (0 != delta.dexterityRequired) {
-            if (0 != accum.dexterityRequired) {
-                return "dexterityRequired";
+            if (0 != dexterityRequired) {
+                markDirty("dexterityRequired");
             }
-            accum.dexterityRequired = delta.dexterityRequired;
+            dexterityRequired = delta.dexterityRequired;
         }
         if (0 != delta.intelligenceRequired) {
-            if (0 != accum.intelligenceRequired) {
-                return "intelligenceRequired";
+            if (0 != intelligenceRequired) {
+                markDirty("intelligenceRequired");
             }
-            accum.intelligenceRequired = delta.intelligenceRequired;
+            intelligenceRequired = delta.intelligenceRequired;
         }
-        return null;
     }
 
-    public static String joinSocketsInPlace(ItemAttributes accum, ItemAttributes delta) {
+    public void joinSockets(ItemAttributes delta) {
         // Special case: Do nothing when given a null delta.
         if (null == delta) {
-            return null;
+            return;
         }
         // Join the item's sockets.
         if (null != delta.sockets) {
-            if (null != accum.sockets) {
-                return "sockets";
+            if (null != sockets) {
+                markDirty("sockets");
             }
-            accum.sockets = delta.sockets;
+            sockets = delta.sockets;
         }
-        return null;
     }
 
-    public static String joinLevelInPlace(ItemAttributes accum, ItemAttributes delta) {
+    public void joinLevel(ItemAttributes delta) {
         // Special case: Do nothing when given a null delta.
         if (null == delta) {
-            return null;
+            return;
         }
         // Join the item's sockets.
         if (0 != delta.level) {
-            if (0 != accum.level) {
-                return "level";
+            if (0 != level) {
+                markDirty("level");
             }
-            accum.level = delta.level;
+            level = delta.level;
         }
-        return null;
     }
 
-    public static String joinPropertiesInPlace(ItemAttributes accum, ItemAttributes delta) {
+    public void joinProperties(ItemAttributes delta) {
         // Special case: Do nothing when given a null delta.
         if (null == delta) {
-            return null;
+            return;
         }
         // Join the item properties.
         if (null != delta.implicit) {
-            if (null != accum.implicit) {
-                return "implicit";
+            if (null != implicit) {
+                markDirty("implicit");
             }
-            accum.implicit = delta.implicit;
+            implicit = delta.implicit;
         }
         if (null != delta.explicits) {
-            if (null != accum.explicits) {
-                return "explicits";
+            if (null != explicits) {
+                markDirty("explicits");
             }
-            accum.explicits = delta.explicits;
+            explicits = delta.explicits;
         }
-        return null;
     }
 
-    public static String joinTagsInPlace(ItemAttributes accum, ItemAttributes delta) {
+    public void joinTags(ItemAttributes delta) {
         // Special case: Do nothing when given a null delta.
         if (null == delta) {
-            return null;
+            return;
         }
         // Join the item tags.
         if (false != delta.corrupted) {
-            if (false != accum.corrupted) {
-                return "corrupted";
+            if (false != corrupted) {
+                markDirty("corrupted");
             }
-            accum.corrupted = delta.corrupted;
+            corrupted = delta.corrupted;
         }
         if (false != delta.mirrored) {
-            if (false != accum.mirrored) {
-                return "mirrored";
+            if (false != mirrored) {
+                markDirty("mirrored");
             }
-            accum.mirrored = delta.mirrored;
+            mirrored = delta.mirrored;
         }
         if (false != delta.unidentified) {
-            if (false != accum.unidentified) {
-                return "unidentified";
+            if (false != unidentified) {
+                markDirty("unidentified");
             }
-            accum.unidentified = delta.unidentified;
+            unidentified = delta.unidentified;
         }
-        return null;
+        if (null != delta.dirty) {
+            if (null == dirty) {
+                dirty = new HashSet<>();
+            }
+            dirty.addAll(delta.dirty);
+        }
+    }
+
+    public void markDirty(String string) {
+        if (null == dirty) {
+            dirty = new HashSet<>();
+        }
+        dirty.add(string);
     }
 
     /*
@@ -315,6 +323,7 @@ public class ItemAttributes {
         result = prime * result + (corrupted ? 1231 : 1237);
         result = prime * result + ((critical == null) ? 0 : critical.hashCode());
         result = prime * result + dexterityRequired;
+        result = prime * result + ((dirty == null) ? 0 : dirty.hashCode());
         result = prime * result + ((elemental == null) ? 0 : elemental.hashCode());
         result = prime * result + energyShield;
         result = prime * result + evasionRating;
@@ -390,6 +399,13 @@ public class ItemAttributes {
             return false;
         }
         if (dexterityRequired != other.dexterityRequired) {
+            return false;
+        }
+        if (dirty == null) {
+            if (other.dirty != null) {
+                return false;
+            }
+        } else if (!dirty.equals(other.dirty)) {
             return false;
         }
         if (elemental == null) {
@@ -484,7 +500,7 @@ public class ItemAttributes {
                 + ", strengthRequired=" + strengthRequired + ", dexterityRequired=" + dexterityRequired
                 + ", intelligenceRequired=" + intelligenceRequired + ", sockets=" + sockets + ", level=" + level
                 + ", implicit=" + implicit + ", explicits=" + explicits + ", corrupted=" + corrupted + ", mirrored="
-                + mirrored + ", unidentified=" + unidentified + "]";
+                + mirrored + ", unidentified=" + unidentified + ", dirty=" + dirty + "]";
     }
 
 }
