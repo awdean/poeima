@@ -1,10 +1,15 @@
 package com.awdean.grammar.common;
 
+import static org.hamcrest.Matchers.arrayWithSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 
 import org.junit.Test;
@@ -17,6 +22,19 @@ import com.google.common.collect.Range;
 
 public class TerminalsGrammarTest {
 
+    @Test
+    public void testConstructorIsPrivate() throws IllegalAccessException,
+                                                  InstantiationException,
+                                                  InvocationTargetException,
+                                                  NoSuchMethodException {
+        assertThat(TerminalsGrammar.class.getDeclaredConstructors(), arrayWithSize(1));
+        Constructor<TerminalsGrammar> constructor = TerminalsGrammar.class.getDeclaredConstructor();
+        assertTrue(Modifier.isPrivate(constructor.getModifiers()));
+        constructor.setAccessible(true);
+        assertThat(constructor.newInstance(), is(notNullValue()));
+        constructor.setAccessible(false);
+    }
+    
     @Test
     public void testTFloatParse() {
         Parser parser = TerminalsGrammar.tFloat().end();
