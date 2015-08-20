@@ -17,7 +17,7 @@ public class ItemTypeTest {
     public void testParseItemTypeDistinct() {
         List<ItemType> values = Arrays.asList(ItemType.values());
         Set<String> descriptions = values.stream()
-                                         .map((ItemType ItemType) -> ItemType.toString())
+                                         .map((ItemType itemType) -> itemType.toString())
                                          .collect(Collectors.toSet());
         assertThat(descriptions, iterableWithSize(values.size()));
     }
