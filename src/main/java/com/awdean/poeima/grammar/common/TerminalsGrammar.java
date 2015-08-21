@@ -1,18 +1,15 @@
-package com.awdean.grammar.common;
+package com.awdean.poeima.grammar.common;
 
 import static org.petitparser.parser.primitive.CharacterParser.digit;
 import static org.petitparser.parser.primitive.CharacterParser.of;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.function.Function;
 
 import org.petitparser.parser.Parser;
 import org.petitparser.utils.Functions;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.ContiguousSet;
-import com.google.common.collect.DiscreteDomain;
 import com.google.common.collect.Range;
 
 public class TerminalsGrammar {
@@ -46,14 +43,10 @@ public class TerminalsGrammar {
         Parser parser = digit().plus().seq(of('-'), digit().plus());
         parser = parser.trim();
         parser = parser.map(Functions.withoutSeparators());
-        return parser.map(new Function<List<List<Integer>>, ContiguousSet<Integer>>() {
-            @Override
-            public ContiguousSet<Integer> apply(List<List<Integer>> input) {
-                int lhs = Integer.parseInt(Joiner.on("").join(input.get(0)));
-                int rhs = Integer.parseInt(Joiner.on("").join(input.get(1)));
-                Range<Integer> range = Range.closed(lhs, rhs);
-                return ContiguousSet.create(range, DiscreteDomain.integers());
-            }
+        return parser.map((List<List<Integer>> value) -> {
+            int lhs = Integer.parseInt(Joiner.on("").join(value.get(0)));
+            int rhs = Integer.parseInt(Joiner.on("").join(value.get(1)));
+            return Range.closed(lhs, rhs);
         });
     }
 

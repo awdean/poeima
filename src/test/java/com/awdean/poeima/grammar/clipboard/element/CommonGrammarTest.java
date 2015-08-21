@@ -1,4 +1,4 @@
-package com.awdean.grammar.clipboard.element;
+package com.awdean.poeima.grammar.clipboard.element;
 
 import static org.hamcrest.Matchers.arrayWithSize;
 import static org.hamcrest.Matchers.equalTo;
@@ -20,7 +20,8 @@ import org.junit.Test;
 import org.petitparser.context.Result;
 import org.petitparser.parser.Parser;
 
-import com.awdean.data.ItemAttributes;
+import com.awdean.poeima.data.ItemAttributes;
+import com.awdean.poeima.grammar.clipboard.element.CommonGrammar;
 
 public class CommonGrammarTest {
 
@@ -120,8 +121,6 @@ public class CommonGrammarTest {
         assertFalse(parser.accept("+10% to all Elemental Resistances"));
         assertFalse(parser.accept("TEST\n+10% to all Elemental Resistances"));
 
-        // It's possible we'd want to exclude other defined item sections here.
-
         assertTrue(parser.accept(CommonGrammar.SECTION_BREAK + "\n" + "+10% to all Elemental Resistances"));
     }
 
@@ -136,6 +135,43 @@ public class CommonGrammarTest {
         assertValueInvariants(parser, input, output);
     }
 
+    @Test
+    public void testItemExplicitsParse() {
+        Parser parser = CommonGrammar.itemExplicits().end();
+
+        assertFalse(parser.accept("+10% to all Elemental Resistances"));
+        assertFalse(parser.accept("TEST\n+10% to all Elemental Resistances"));
+
+        String accepted = CommonGrammar.SECTION_BREAK + "\n" + "+10% to all Elemental Resistances";
+        assertTrue(parser.accept(accepted));
+        accepted += "\n" + "+100 to maximum Life";
+        accepted += "\n" + "+50 to maximum Mana";
+        assertTrue(parser.accept(accepted));
+    }
+    
+    @Test
+    public void testItemExplicitsValue() {
+        Parser parser = CommonGrammar.itemExplicits();
+        String input = CommonGrammar.SECTION_BREAK + "\n" + "+10% to all Elemental Resistances";
+        
+        ItemAttributes output = new ItemAttributes();
+        output.explicits = new ArrayList<>();
+        output.explicits.add("+10% to all Elemental Resistances");
+        
+        Result result = parser.parse(input);
+        assertTrue(result.isSuccess());
+        assertThat(result.get(), is(output));
+        
+        input += "\n" + "+100 to maximum Life";
+        output.explicits.add("+100 to maximum Life");
+        input += "\n" + "+50 to maximum Mana";
+        output.explicits.add("+50 to maximum Mana");
+
+        result = parser.parse(input);
+        assertTrue(result.isSuccess());
+        assertThat(result.get(), is(output));
+    }
+    
     @Test
     public void testItemLevelParse() {
         Parser parser = CommonGrammar.itemLevel().end();

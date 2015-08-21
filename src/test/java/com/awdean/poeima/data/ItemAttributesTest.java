@@ -1,4 +1,4 @@
-package com.awdean.data;
+package com.awdean.poeima.data;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -15,6 +15,9 @@ import java.util.function.BiConsumer;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.awdean.poeima.data.ItemAttributes;
+import com.awdean.poeima.data.ItemRarity;
+import com.awdean.poeima.data.ItemType;
 import com.google.common.collect.Range;
 
 public class ItemAttributesTest {

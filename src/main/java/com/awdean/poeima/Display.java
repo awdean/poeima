@@ -1,4 +1,4 @@
-package com.awdean;
+package com.awdean.poeima;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

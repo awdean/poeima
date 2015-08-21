@@ -1,4 +1,4 @@
-package com.awdean;
+package com.awdean.poeima;
 
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
@@ -18,6 +18,8 @@ import java.awt.datatransfer.StringSelection;
 import java.util.Arrays;
 
 import org.junit.Test;
+
+import com.awdean.poeima.ClipMon;
 
 public class ClipMonTest {
 

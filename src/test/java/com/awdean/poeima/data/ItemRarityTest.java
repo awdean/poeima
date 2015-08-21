@@ -1,4 +1,4 @@
-package com.awdean.data;
+package com.awdean.poeima.data;
 
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
@@ -11,6 +11,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
+
+import com.awdean.poeima.data.ItemRarity;
 
 public class ItemRarityTest {
 

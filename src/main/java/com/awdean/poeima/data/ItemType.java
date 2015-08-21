@@ -1,4 +1,4 @@
-package com.awdean.data;
+package com.awdean.poeima.data;
 
 public enum ItemType {
     // Armour Types

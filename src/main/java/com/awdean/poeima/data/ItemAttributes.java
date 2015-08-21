@@ -1,4 +1,4 @@
-package com.awdean.data;
+package com.awdean.poeima.data;
 
 import java.math.BigDecimal;
 import java.util.HashSet;

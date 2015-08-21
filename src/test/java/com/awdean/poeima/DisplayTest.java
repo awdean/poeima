@@ -1,4 +1,4 @@
-package com.awdean;
+package com.awdean.poeima;
 
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -15,6 +15,8 @@ import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
 import org.junit.Test;
+
+import com.awdean.poeima.Display;
 
 public class DisplayTest {
 

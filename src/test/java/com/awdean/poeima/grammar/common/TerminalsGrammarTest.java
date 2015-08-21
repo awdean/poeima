@@ -1,4 +1,4 @@
-package com.awdean.grammar.common;
+package com.awdean.poeima.grammar.common;
 
 import static org.hamcrest.Matchers.arrayWithSize;
 import static org.hamcrest.Matchers.is;
@@ -16,8 +16,7 @@ import org.junit.Test;
 import org.petitparser.context.Result;
 import org.petitparser.parser.Parser;
 
-import com.google.common.collect.ContiguousSet;
-import com.google.common.collect.DiscreteDomain;
+import com.awdean.poeima.grammar.common.TerminalsGrammar;
 import com.google.common.collect.Range;
 
 public class TerminalsGrammarTest {
@@ -159,11 +158,11 @@ public class TerminalsGrammarTest {
 
         Result result = parser.parse("4-20");
         assertTrue(result.isSuccess());
-        assertThat(result.get(), is(ContiguousSet.create(Range.closed(4, 20), DiscreteDomain.integers())));
+        assertThat(result.get(), is(Range.closed(4, 20)));
 
         result = parser.parse("\t4-20 \n");
         assertTrue(result.isSuccess());
-        assertThat(result.get(), is(ContiguousSet.create(Range.closed(4, 20), DiscreteDomain.integers())));
+        assertThat(result.get(), is(Range.closed(4, 20)));
     }
 
 }
