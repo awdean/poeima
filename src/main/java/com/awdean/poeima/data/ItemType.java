@@ -31,6 +31,7 @@ public enum ItemType {
         _description = description;
     }
     
+    @Override
     public String toString() {
         return _description;
     }

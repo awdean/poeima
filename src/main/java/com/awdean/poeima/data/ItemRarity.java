@@ -12,6 +12,7 @@ public enum ItemRarity {
         _description = description;
     }
 
+    @Override
     public String toString() {
         return _description;
     }
