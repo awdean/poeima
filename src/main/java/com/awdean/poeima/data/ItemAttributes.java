@@ -66,23 +66,21 @@ public class ItemAttributes {
 
         ItemAttributes combined = new ItemAttributes();
         // join the lhs
-        combined.joinCore(ialhs);
-        combined.joinInherents(ialhs);
-        combined.joinRequirements(ialhs);
-        combined.joinSockets(ialhs);
-        combined.joinLevel(ialhs);
-        combined.joinProperties(ialhs);
-        combined.joinTags(ialhs);
+        combined.joinAll(ialhs);
         // join the rhs
-        combined.joinCore(iarhs);
-        combined.joinInherents(iarhs);
-        combined.joinRequirements(iarhs);
-        combined.joinSockets(iarhs);
-        combined.joinLevel(iarhs);
-        combined.joinProperties(iarhs);
-        combined.joinTags(iarhs);
+        combined.joinAll(iarhs);
 
         return combined;
+    }
+
+    public void joinAll(ItemAttributes delta) {
+        joinCore(delta);
+        joinInherents(delta);
+        joinRequirements(delta);
+        joinSockets(delta);
+        joinLevel(delta);
+        joinProperties(delta);
+        joinTags(delta);
     }
 
     public void joinCore(ItemAttributes delta) {
