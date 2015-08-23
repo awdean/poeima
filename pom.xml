@@ -47,14 +47,14 @@
   </dependencies>
 
   <build>
-    <resources>
+<!--    <resources>
       <resource>
         <directory>${project.basedir}</directory>
         <includes>
           <include>LICENSE</include>
         </includes>
       </resource>
-    </resources>
+    </resources>-->
     <plugins>
       <plugin>
         <groupId>org.eluder.coveralls</groupId>
